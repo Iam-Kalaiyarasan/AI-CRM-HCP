@@ -6,21 +6,51 @@ import { useState } from "react";
 export default function Search() {
 
     const [name, setName] = useState("");
-
     const [data, setData] = useState([]);
 
     const search = async () => {
 
-        const res = await API.get(`/search?hcp_name=${name}`);
+        try {
 
-        setData(res.data);
+            const res = await API.get(`/search?hcp_name=${name}`);
+
+            setData(res.data);
+
+        } catch (err) {
+
+            console.log(err);
+
+            alert("Search Failed");
+
+        }
 
     };
+
+    const editInteraction = async (item) => {
+
+    try {
+
+        await API.put(`/edit/${item.id}`, {
+            voice_summary: "Updated from CRM"
+        });
+
+        alert("Interaction Updated Successfully");
+
+        search();
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert("Update Failed");
+
+    }
+
+};
 
     return (
 
         <>
-
             <Navbar />
 
             <div className="container">
@@ -30,14 +60,17 @@ export default function Search() {
                 <input
                     placeholder="Doctor Name"
                     value={name}
-                    onChange={(e)=>setName(e.target.value)}
+                    onChange={(e) => setName(e.target.value)}
                 />
 
                 <button onClick={search}>
                     Search
                 </button>
 
-                <SearchTable data={data} />
+                <SearchTable
+                    data={data}
+                    onEdit={editInteraction}
+                />
 
             </div>
 

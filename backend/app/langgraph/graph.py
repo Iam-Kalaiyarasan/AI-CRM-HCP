@@ -1,24 +1,18 @@
 from langgraph.graph import StateGraph, END
 from typing import TypedDict
-from app.tools.log_tool import log_interaction_tool
-
+from app.services.ai_service import analyze_interaction
 
 class GraphState(TypedDict):
     text: str
     result: str
 
-
-def log_node(state):
-    state["result"] = log_interaction_tool(state["text"])
+def ai_node(state):
+    state["result"] = analyze_interaction(state["text"])
     return state
 
-
 builder = StateGraph(GraphState)
-
-builder.add_node("log", log_node)
-
-builder.set_entry_point("log")
-
-builder.add_edge("log", END)
+builder.add_node("ai", ai_node)
+builder.set_entry_point("ai")
+builder.add_edge("ai", END)
 
 graph = builder.compile()
