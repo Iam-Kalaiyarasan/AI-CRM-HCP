@@ -1,5 +1,13 @@
-from app.services.ai_service import analyze_interaction
+from datetime import datetime
 
+def log_interaction_tool(action: str):
 
-def log_interaction_tool(text: str):
-    return analyze_interaction(text)
+    log = {
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "action": action,
+        "status": "Success"
+    }
+
+    print(log)
+
+    return log

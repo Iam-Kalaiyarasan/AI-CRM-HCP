@@ -1,4 +1,4 @@
-export default function SearchTable({ data }) {
+export default function SearchTable({ data, onEdit }) {
 
     if (!data || data.length === 0) {
         return (
@@ -33,6 +33,7 @@ export default function SearchTable({ data }) {
                     <th style={styles.th}>Date</th>
                     <th style={styles.th}>Time</th>
                     <th style={styles.th}>Sentiment</th>
+                    <th style={styles.th}>Action</th>
 
                 </tr>
 
@@ -45,16 +46,27 @@ export default function SearchTable({ data }) {
                     <tr key={item.id}>
 
                         <td style={styles.td}>{item.id}</td>
-
                         <td style={styles.td}>{item.hcp_name}</td>
-
                         <td style={styles.td}>{item.interaction_type}</td>
-
                         <td style={styles.td}>{item.interaction_date}</td>
-
                         <td style={styles.td}>{item.interaction_time}</td>
-
                         <td style={styles.td}>{item.sentiment}</td>
+
+                        <td style={styles.td}>
+                            <button
+                                onClick={() => onEdit(item)}
+                                style={{
+                                    background: "#1976d2",
+                                    color: "white",
+                                    border: "none",
+                                    padding: "6px 12px",
+                                    borderRadius: "5px",
+                                    cursor: "pointer"
+                                }}
+                            >
+                                Edit
+                            </button>
+                        </td>
 
                     </tr>
 

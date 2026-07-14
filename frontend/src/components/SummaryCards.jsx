@@ -12,13 +12,24 @@ export default function SummaryCards() {
     }, []);
 
     const loadSummary = async () => {
-
+    try {
         const res = await API.get("/summary");
+
+        console.log("Summary Response:", res.data);
 
         setSummary(res.data);
 
-    };
+    } catch (err) {
+    console.error("Summary Error:", err);
 
+    setSummary({
+        total_interactions: 0,
+        positive: 0,
+        neutral: 0,
+        negative: 0
+    });
+}
+};
     if (!summary)
         return <h3>Loading...</h3>;
 

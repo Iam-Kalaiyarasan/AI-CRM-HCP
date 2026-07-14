@@ -3,188 +3,138 @@ import { useFormContext } from "../context/FormContext";
 
 export default function InteractionForm() {
 
-  const { formData, setFormData } = useFormContext();
-  console.log("FORM DATA:", formData);
+    const { formData, setFormData } = useFormContext();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
 
-  const saveInteraction = async () => {
+const saveInteraction = async () => {
+    const payload = {
+        ...formData,
+        interaction_date: formData.interaction_date || new Date().toISOString().split("T")[0],
+        interaction_time: formData.interaction_time || new Date().toTimeString().slice(0, 5)
+    };
+
     try {
-      const res = await API.post("/interactions", formData);
-      alert(res.data.message);
+        const res = await API.post("/interactions", payload);
+        alert("Saved Successfully");
     } catch (err) {
-      console.log(err);
-      alert("Failed to save interaction");
+        console.error(err);
+        alert("Save Failed");
     }
-  };
+};
 
-  return (
-    <div className="card">
+    return (
 
-      <h2>📝 HCP Interaction</h2>
-      <h3>{formData.hcp_name}</h3>
+        <div className="card">
 
-<h3>{formData.voice_summary}</h3>
+            <h2>📝 HCP Interaction</h2>
 
-<h3>{formData.sentiment}</h3>
+            <input
+                type="text"
+                name="hcp_name"
+                placeholder="HCP Name"
+                value={formData.hcp_name}
+                onChange={handleChange}
+            />
 
-      <input
-        type="text"
-        name="hcp_name"
-        placeholder="HCP Name"
-        value={formData.hcp_name}
-        onChange={handleChange}
-        style={{ width: "100%", padding: "10px" }}
-      />
+            <select
+                name="interaction_type"
+                value={formData.interaction_type}
+                onChange={handleChange}
+            >
+                <option value="">Select Interaction Type</option>
+                <option value="Meeting">Meeting</option>
+                <option value="Call">Call</option>
+                <option value="Email">Email</option>
+            </select>
 
-      <br /><br />
+            <input
+                type="date"
+                name="interaction_date"
+                value={formData.interaction_date}
+                onChange={handleChange}
+            />
 
-      <select
-        name="interaction_type"
-        value={formData.interaction_type}
-        onChange={handleChange}
-        style={{ width: "100%", padding: "10px" }}
-      >
-        <option value="">Select Interaction Type</option>
-        <option value="Meeting">Meeting</option>
-        <option value="Call">Call</option>
-        <option value="Email">Email</option>
-      </select>
+            <input
+                type="time"
+                name="interaction_time"
+                value={formData.interaction_time}
+                onChange={handleChange}
+            />
 
-      <br /><br />
+            <textarea
+                name="attendees"
+                placeholder="Attendees"
+                value={formData.attendees}
+                onChange={handleChange}
+            />
 
-      <input
-        type="date"
-        name="interaction_date"
-        value={formData.interaction_date}
-        onChange={handleChange}
-        style={{ width: "100%", padding: "10px" }}
-      />
+            <textarea
+                name="topics"
+                placeholder="Topics"
+                value={formData.topics}
+                onChange={handleChange}
+            />
 
-      <br /><br />
+            <textarea
+                name="voice_summary"
+                placeholder="Voice Summary"
+                value={formData.voice_summary}
+                onChange={handleChange}
+            />
 
-      <input
-        type="time"
-        name="interaction_time"
-        value={formData.interaction_time}
-        onChange={handleChange}
-        style={{ width: "100%", padding: "10px" }}
-      />
+            <input
+                type="text"
+                name="materials"
+                placeholder="Materials"
+                value={formData.materials}
+                onChange={handleChange}
+            />
 
-      <br /><br />
+            <input
+                type="text"
+                name="samples"
+                placeholder="Samples"
+                value={formData.samples}
+                onChange={handleChange}
+            />
 
-      <textarea
-        name="attendees"
-        placeholder="Attendees"
-        rows="2"
-        value={formData.attendees}
-        onChange={handleChange}
-        style={{ width: "100%", padding: "10px" }}
-      />
+            <select
+                name="sentiment"
+                value={formData.sentiment}
+                onChange={handleChange}
+            >
+                <option value="">Select Sentiment</option>
+                <option value="Positive">Positive</option>
+                <option value="Neutral">Neutral</option>
+                <option value="Negative">Negative</option>
+            </select>
 
-      <br /><br />
+            <textarea
+                name="outcomes"
+                placeholder="Outcomes"
+                value={formData.outcomes}
+                onChange={handleChange}
+            />
 
-      <textarea
-        name="topics"
-        placeholder="Topics Discussed"
-        rows="3"
-        value={formData.topics}
-        onChange={handleChange}
-        style={{ width: "100%", padding: "10px" }}
-      />
+            <textarea
+                name="followup"
+                placeholder="Follow Up"
+                value={formData.followup}
+                onChange={handleChange}
+            />
 
-      <br /><br />
+            <button onClick={saveInteraction}>
+                Save Interaction
+            </button>
 
-      <textarea
-        name="voice_summary"
-        placeholder="Voice Summary"
-        rows="4"
-        value={formData.voice_summary}
-        onChange={handleChange}
-        style={{ width: "100%", padding: "10px" }}
-      />
+        </div>
 
-      <br /><br />
+    );
 
-      <input
-        type="text"
-        name="materials"
-        placeholder="Materials Shared"
-        value={formData.materials}
-        onChange={handleChange}
-        style={{ width: "100%", padding: "10px" }}
-      />
-
-      <br /><br />
-
-      <input
-        type="text"
-        name="samples"
-        placeholder="Samples Distributed"
-        value={formData.samples}
-        onChange={handleChange}
-        style={{ width: "100%", padding: "10px" }}
-      />
-
-      <br /><br />
-
-      <select
-        name="sentiment"
-        value={formData.sentiment}
-        onChange={handleChange}
-        style={{ width: "100%", padding: "10px" }}
-      >
-        <option value="">Select Sentiment</option>
-        <option value="Positive">Positive</option>
-        <option value="Neutral">Neutral</option>
-        <option value="Negative">Negative</option>
-      </select>
-
-      <br /><br />
-
-      <textarea
-        name="outcomes"
-        placeholder="Outcomes"
-        rows="3"
-        value={formData.outcomes}
-        onChange={handleChange}
-        style={{ width: "100%", padding: "10px" }}
-      />
-
-      <br /><br />
-
-      <textarea
-        name="followup"
-        placeholder="Follow-up"
-        rows="3"
-        value={formData.followup}
-        onChange={handleChange}
-        style={{ width: "100%", padding: "10px" }}
-      />
-
-      <br /><br />
-
-      <button
-        onClick={saveInteraction}
-        style={{
-          width: "100%",
-          padding: "12px",
-          background: "#1976d2",
-          color: "white",
-          border: "none",
-          cursor: "pointer",
-          fontSize: "16px",
-          borderRadius: "5px"
-        }}
-      >
-        Save Interaction
-      </button>
-
-    </div>
-  );
 }

@@ -28,16 +28,29 @@ export default function AIAssistant() {
         console.log("Response:", res.data);
 
         setFormData(prev => ({
-            ...prev,
-            hcp_name: res.data.hcp_name || "",
-            interaction_type:
-                res.data.interaction_type === "In-person meeting"
-                    ? "Meeting"
-                    : res.data.interaction_type || "",
-            voice_summary: res.data.summary || "",
-            sentiment: res.data.sentiment || "",
-            followup: res.data.followup || ""
-        }));
+    ...prev,
+    hcp_name: res.data.hcp_name || "",
+
+    interaction_type:
+        res.data.interaction_type === "In-person meeting"
+            ? "Meeting"
+            : res.data.interaction_type || "",
+
+    interaction_date:
+        new Date().toISOString().split("T")[0],
+
+    interaction_time:
+        new Date().toLocaleTimeString("en-GB", {
+            hour: "2-digit",
+            minute: "2-digit"
+        }),
+
+    voice_summary: res.data.summary || "",
+
+    sentiment: res.data.sentiment || "",
+
+    followup: res.data.followup || ""
+}));
 
         alert("AI Analysis Completed Successfully!");
 
